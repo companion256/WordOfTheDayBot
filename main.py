@@ -59,11 +59,9 @@ def publishBotProfile():
     time.sleep(nostr._relayPublishTime)
     nostr.disconnectRelays()
 
-BLOCKHEIGHT_REPORTED = "blockheightReported69"
-BLOCKHEIGHT_SEEN = "blockheightSeen"
-LOG_FILE = f"{files.logFolder}nicebot.log"
+LOG_FILE = f"{files.logFolder}word_of_the_day_bot.log"
 CONFIG_FILE = f"{files.dataFolder}config.json"
-DATA_FILE = f"{files.dataFolder}saveddata.json"
+DATA_FILE = f"{files.dataFolder}saved_data.json"
 
 if __name__ == '__main__':
 
@@ -78,8 +76,7 @@ if __name__ == '__main__':
     logging.Formatter.converter = time.gmtime
     logger.addHandler(stdoutLoggingHandler)
     logFile = LOG_FILE
-    fileLoggingHandler = RotatingFileHandler(logFile, mode='a', maxBytes=10*1024*1024, 
-                                 backupCount=21, encoding=None, delay=0)
+    fileLoggingHandler = RotatingFileHandler(logFile, mode='a', maxBytes=10*1024*1024, backupCount=21, encoding=None, delay=0)
     fileLoggingHandler.setFormatter(formatter)
     logger.addHandler(fileLoggingHandler)
     files.logger = logger

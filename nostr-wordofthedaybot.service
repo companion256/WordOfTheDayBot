@@ -1,0 +1,18 @@
+# WordOfTheDayBot: Posts a word of the day
+# /etc/systemd/system/nostr-wordoftheday.service
+
+[Unit]
+Description=nostr-wordoftheday posts a word of the day
+StartLimitIntervalSec=600
+StartLimitBurst=2
+
+[Service]
+WorkingDirectory=/home/admin/nostr-wordoftheday
+ExecStart=/home/admin/.pyenv/nostr-wordoftheday/bin/python3 /home/admin/nostr-wordoftheday/main.py
+User=admin
+Restart=on-failure
+RestartSec=30
+PermissionsStartOnly=true
+
+[Install]
+WantedBy=multi-user.target
