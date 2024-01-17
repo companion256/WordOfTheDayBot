@@ -2,21 +2,25 @@
 import files as files
 import utils as utils
 
+
 def getUserLedgerFilename(npub):
     filename = f"{files.userLedgerFolder}{npub}.ledger.json"
     return filename
 
+
 def getCreditBalance(npub):
     filename = getUserLedgerFilename(npub)
     ledger = files.loadJsonFile(filename)
-    if ledger is None: return 0
+    if ledger is None:
+        return 0
     balance = int(ledger[-1]["balance"])
     return balance
+
 
 def recordEntry(npub, type, credits, mcredits, description):
     filename = getUserLedgerFilename(npub)
     ledger = files.loadJsonFile(filename)
-    if ledger is None: 
+    if ledger is None:
         # initialize first entry
         ledger = []
         balance = 0.000
@@ -29,14 +33,14 @@ def recordEntry(npub, type, credits, mcredits, description):
             "mcredits": 0,
             "balance": balance,
             "description": "Initialized Balance",
-            }
+        }
         ledger.append(firstEntry)
     else:
         # get current balance from existing, last record
         balance = ledger[-1]["balance"]
     # Determine new balance based on amounts passed in
     balance += credits
-    balance += (mcredits/1000)
+    balance += mcredits / 1000
     # Add the new entry
     created_at, created_at_iso = utils.getTimes()
     newEntry = {
@@ -47,7 +51,7 @@ def recordEntry(npub, type, credits, mcredits, description):
         "mcredits": mcredits,
         "balance": balance,
         "description": description,
-        }
+    }
     ledger.append(newEntry)
     # Save to disk
     files.saveJsonFile(filename, ledger)
@@ -56,6 +60,7 @@ def recordEntry(npub, type, credits, mcredits, description):
         rotateLedger(npub, ledger)
     # return new balance
     return balance
+
 
 def rotateLedger(npub, ledger):
     # first save current contents to the archive
@@ -70,7 +75,7 @@ def rotateLedger(npub, ledger):
         "REPLY MESSAGE": {"credits": 0, "mcredits": 0},
         "ZAPS": {"credits": 0, "mcredits": 0},
         "ROUTING FEES": {"credits": 0, "mcredits": 0},
-        "SERVICE FEES": {"credits": 0, "mcredits": 0}
+        "SERVICE FEES": {"credits": 0, "mcredits": 0},
     }
     for ledgerEntry in ledger:
         type = ledgerEntry["type"]
@@ -83,17 +88,17 @@ def rotateLedger(npub, ledger):
     balance = 0
     for ledgerSummaryType, ledgerSummaryItem in ledgerSummary.items():
         balance = balance + ledgerSummaryItem["credits"]
-        balance = balance + (ledgerSummaryItem["mcredits"]/1000)
-        newLedger.append({
-            "created_at": t,
-            "created_at_iso": tISO,
-            "type": ledgerSummaryType,
-            "credits": ledgerSummaryItem["credits"],
-            "mcredits": ledgerSummaryItem["mcredits"],
-            "balance": balance,
-            "description": "Carry over from ledger rotation",
-            })
+        balance = balance + (ledgerSummaryItem["mcredits"] / 1000)
+        newLedger.append(
+            {
+                "created_at": t,
+                "created_at_iso": tISO,
+                "type": ledgerSummaryType,
+                "credits": ledgerSummaryItem["credits"],
+                "mcredits": ledgerSummaryItem["mcredits"],
+                "balance": balance,
+                "description": "Carry over from ledger rotation",
+            }
+        )
     filename = getUserLedgerFilename(npub)
     files.saveJsonFile(filename, newLedger)
-    
-    

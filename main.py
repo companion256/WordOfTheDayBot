@@ -8,6 +8,7 @@ import files as files
 import nostr as nostr
 import utils as utils
 
+
 def publishBotProfile():
     profile = nostr.config["profile"]
     profilePK = nostr.getPrivateKey()
@@ -19,11 +20,13 @@ def publishBotProfile():
     time.sleep(nostr._relayPublishTime)
     nostr.disconnectRelays()
 
+
 def makeProfileFromDict(profile, pubkey):
     j = {}
-    kset = ("name","about","description","nip05","lud16","picture","banner")
-    for k in kset: 
-        if k in profile and len(profile[k]) > 0: j[k] = profile[k]
+    kset = ("name", "about", "description", "nip05", "lud16", "picture", "banner")
+    for k in kset:
+        if k in profile and len(profile[k]) > 0:
+            j[k] = profile[k]
     if "description" in j and "about" not in j:
         j["about"] = j["description"]
         del j["description"]
@@ -32,8 +35,9 @@ def makeProfileFromDict(profile, pubkey):
         content=content,
         public_key=pubkey,
         kind=EventKind.SET_METADATA,
-        )
+    )
     return kind0
+
 
 def validateConfig():
     if len(config.keys()) == 0:
@@ -43,6 +47,7 @@ def validateConfig():
             "You will need to modify this file to setup nostr and bitcoin sections"
         )
         quit()
+
 
 def getWordOfTheDay():
     logger.warning("Implement This.")
