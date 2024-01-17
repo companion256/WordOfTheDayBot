@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import libfiles as files
-import libutils as utils
+import files as files
+import utils as utils
 
 def getUserLedgerFilename(npub):
     filename = f"{files.userLedgerFolder}{npub}.ledger.json"

@@ -1,30 +1,21 @@
 {
-    "nostr": {
-        "nsec": "nsecwhatever",
-        "profile": {
-            "name": "Nice Bot",
-            "about": "This bot posts whenever the Bitcoin blockheight contains 69",
-            "picture": "",
-            "banner": "",
-            "lud16": "wearydoor58@walletofsatoshi.com",
-            "nip05": ""
-        },
-        "relays": [
-            {"url":"wss://nostr.pleb.network","read":true,"write":true},
-            {"url":"wss://nostr-pub.wellorder.net","read":true,"write":true},
-            {"url":"wss://relay.damus.io","read":true,"write":true},
-            {"url":"wss://nos.lol","read":true,"write":true},
-            {"url":"wss://relay.nostr.band","read":true,"write":true},
-            {"url":"wss://relayable.org","read":true,"write":true}
-        ]
+  "nostr": {
+    "nsec": "nsecwhatever",
+    "profile": {
+      "name": "Nice Bot",
+      "about": "This bot posts whenever the Bitcoin blockheight contains 69",
+      "picture": "",
+      "banner": "",
+      "lud16": "wearydoor58@walletofsatoshi.com",
+      "nip05": ""
     },
-    "bitcoin": {
-        "url": "https://blockstream.info/api/blocks/tip/height"
-    },
-    "matchon": {
-        "value": "69",
-        "type.comment": "can be: contains, endswith, startswith, modulus",
-        "type": "contains",
-        "text": "NICE"
-    }
+    "relays": [
+      { "url": "wss://nostr.pleb.network", "read": true, "write": true },
+      { "url": "wss://nostr-pub.wellorder.net", "read": true, "write": true },
+      { "url": "wss://relay.damus.io", "read": true, "write": true },
+      { "url": "wss://nos.lol", "read": true, "write": true },
+      { "url": "wss://relay.nostr.band", "read": true, "write": true },
+      { "url": "wss://relayable.org", "read": true, "write": true }
+    ]
+  }
 }

@@ -5,10 +5,10 @@ import json
 import os
 import requests
 import urllib
-import libfiles as files
-import libnostr as nostr
-import libutils as utils
-import libledger as ledger
+import files as files
+import nostr as nostr
+import utils as utils
+import ledger as ledger
 
 # suppress warnings as verify will be set to false for self-signed nodes
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)

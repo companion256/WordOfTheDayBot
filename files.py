@@ -2,9 +2,9 @@
 import json
 import os
 import shutil
-import libutils as utils
+import utils as utils
 
-logger = None       # set by calling setLogger
+logger = None # set by calling setLogger
 
 # Make common folders if not already present
 dataFolder = "data/"

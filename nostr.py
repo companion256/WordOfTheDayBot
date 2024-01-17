@@ -9,9 +9,9 @@ import json
 import random
 import ssl
 import time
-import libfiles as files
-import libutils as utils
-import liblnurl as lnurl
+import files as files
+import utils as utils
+import lnurl as lnurl
 
 logger = None
 config = None
