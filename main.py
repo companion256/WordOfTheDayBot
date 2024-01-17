@@ -1,9 +1,10 @@
 from logging.handlers import RotatingFileHandler
-from nostr.event import Event
+from nostr.event import Event, EventKind
 import logging
 import shutil
 import sys
 import time
+import json
 import files as files
 import nostr as nostr
 import utils as utils
@@ -54,6 +55,8 @@ def getWordOfTheDay():
     pass
 
 
+NEW_WORD_REPORTED = "newWordReported"
+NEW_WORD_SEEN = "newWordSeen"
 LOG_FILE = f"{files.logFolder}-word_of_the_day_bot.log"
 CONFIG_FILE = f"{files.dataFolder}-config.json"
 DATA_FILE = f"{files.dataFolder}-saved_data.json"
@@ -102,12 +105,12 @@ if __name__ == "__main__":
     # Initialize empty data
     logger.debug("Initializing...")
     changed = False
-    if BLOCKHEIGHT_SEEN not in savedData:
+    if NEW_WORD_SEEN not in savedData:
         changed = True
-        savedData[BLOCKHEIGHT_SEEN] = getBlockHeight()
-    if BLOCKHEIGHT_REPORTED not in savedData:
+        savedData[NEW_WORD_SEEN] = getWordOfTheDay()
+    if NEW_WORD_REPORTED not in savedData:
         changed = True
-        savedData[BLOCKHEIGHT_REPORTED] = 69
+        savedData[NEW_WORD_REPORTED] = 69
     if changed:
         logger.debug("Saving state")
         files.saveJsonFile(DATA_FILE, savedData)
@@ -118,7 +121,7 @@ if __name__ == "__main__":
         # just track if we made any changes this round
         changed = False
 
-        # Check if new block
+        # Check if new word
         word_of_the_day = getWordOfTheDay()
 
         logger.debug(f"New Word is {word_of_the_day}")
@@ -141,7 +144,7 @@ if __name__ == "__main__":
         time.sleep(nostr._relayPublishTime)
 
         # Make note of last reported
-        savedData[BLOCKHEIGHT_REPORTED] = blockHeight
+        savedData[NEW_WORD_REPORTED] = word_of_the_day
 
         logger.debug("Done checks")
 
@@ -150,12 +153,12 @@ if __name__ == "__main__":
             nostr.disconnectRelays()
 
         # Update our last seen
-        savedData[BLOCKHEIGHT_SEEN] = word_of_the_day
+        savedData[NEW_WORD_SEEN] = word_of_the_day
 
         # Record state
         logger.debug("Saving state")
         files.saveJsonFile(DATA_FILE, savedData)
 
         # Rest a bit
-        logger.debug("Sleeping for 1 minute")
-        time.sleep(60)
+        logger.debug("Sleeping for 1000 minutes")
+        time.sleep(60000)
