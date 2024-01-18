@@ -1,6 +1,6 @@
-# Nice Bot
+# Word of The Day
 
-This script monitors the Bitcoin blockchain and anytime the block height contains `69` it will write a note to Nostr using the defined relays
+This script monitors the word of the day it will write a note to Nostr using the defined relays
 
 - [Clone the repository](#clone-the-repository)
 - [Preparation of Python Environment](#preparation-of-python-environment)
