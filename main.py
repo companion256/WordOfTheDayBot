@@ -1,5 +1,6 @@
 from logging.handlers import RotatingFileHandler
 from nostr.event import Event, EventKind
+from word import get_word_of_the_day
 import logging
 import shutil
 import sys
@@ -50,11 +51,6 @@ def validateConfig():
         quit()
 
 
-def getWordOfTheDay():
-    logger.warning("Implement This.")
-    pass
-
-
 NEW_WORD_REPORTED = "newWordReported"
 NEW_WORD_SEEN = "newWordSeen"
 LOG_FILE = f"{files.logFolder}-word_of_the_day_bot.log"
@@ -99,18 +95,20 @@ if __name__ == "__main__":
 
     publishBotProfile()
 
-    # Load last checked block height
+    # Load last checked word
     savedData = files.loadJsonFile(DATA_FILE, {})
 
     # Initialize empty data
     logger.debug("Initializing...")
+
+    content = get_word_of_the_day()
     changed = False
     if NEW_WORD_SEEN not in savedData:
         changed = True
-        savedData[NEW_WORD_SEEN] = getWordOfTheDay()
+        savedData[NEW_WORD_SEEN] = content["word"]
     if NEW_WORD_REPORTED not in savedData:
         changed = True
-        savedData[NEW_WORD_REPORTED] = 69
+        savedData[NEW_WORD_REPORTED] = content["word"]
     if changed:
         logger.debug("Saving state")
         files.saveJsonFile(DATA_FILE, savedData)
@@ -122,15 +120,14 @@ if __name__ == "__main__":
         changed = False
 
         # Check if new word
-        word_of_the_day = getWordOfTheDay()
+        content = get_word_of_the_day()
+        word = content["word"]
 
-        logger.debug(f"New Word is {word_of_the_day}")
+        logger.info(f"Word of the day {word}")
 
         # NEW WORD!
         changed = True
         is_connected = False
-
-        logger.info(f"Word of the day {word_of_the_day}")
 
         # Connect to relays if not yet connected
         if not is_connected:
@@ -138,13 +135,13 @@ if __name__ == "__main__":
             is_connected = True
 
         # Prepare, sign, and publish message to nostr for this block
-        event = Event(content=matchtext, kind=1, tags=[["word of the day"]])
+        event = Event(content=word, kind=1, tags=[["word of the day"]])
         nostr.getPrivateKey().sign_event(event)
         nostr._relayManager.publish_event(event)
         time.sleep(nostr._relayPublishTime)
 
         # Make note of last reported
-        savedData[NEW_WORD_REPORTED] = word_of_the_day
+        savedData[NEW_WORD_REPORTED] = word
 
         logger.debug("Done checks")
 
@@ -153,7 +150,7 @@ if __name__ == "__main__":
             nostr.disconnectRelays()
 
         # Update our last seen
-        savedData[NEW_WORD_SEEN] = word_of_the_day
+        savedData[NEW_WORD_SEEN] = word
 
         # Record state
         logger.debug("Saving state")
